@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ScoreDeck - American Football Schedule</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root{--bg:#0d1117;--card:#161b22;--accent:#22c55e;--text:#e6edf3;--muted:#8b949e;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;}
+header{background:var(--card);padding:20px;text-align:center;border-bottom:2px solid var(--accent);}
+header h1{color:var(--accent);font-size:26px;}
+nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;padding:16px;background:var(--card);}
+nav a{color:var(--text);text-decoration:none;background:#21262d;padding:10px 16px;border-radius:6px;font-size:14px;}
+nav a:hover{background:var(--accent);color:#0d1117;}
+main{max-width:900px;margin:20px auto;padding:0 16px;}
+.card{background:var(--card);border-radius:8px;padding:16px;margin-bottom:14px;border-left:4px solid var(--accent);}
+.card h3{font-size:16px;margin-bottom:6px;}
+.card p{color:var(--muted);font-size:13px;}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:12px;}
+#status{color:var(--muted);font-size:13px;text-align:center;margin-bottom:10px;}
+</style>
+</head>
+<body>
+<header><h1>American Football Schedule</h1></header>
+<nav>
+<a href="index.html">Home</a>
+<a href="soccer.html">Soccer</a>
+<a href="basketball.html">Basketball</a>
+<a href="american-football.html">American Football</a>
+<a href="tennis.html">Tennis</a>
+<a href="premium.html">Premium</a>
+</nav>
+<main>
+<p id="status">Loading NFL fixtures (requires internet)...</p>
+<div id="events"></div>
+</main>
+<footer>ScoreDeck demo build. Data via TheSportsDB free API.</footer>
+<script>
+fetch('https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4391')
+.then(r=>r.json()).then(data=>{
+ const list = data.events || [];
+ const el = document.getElementById('events');
+ document.getElementById('status').textContent = list.length ? 'Upcoming NFL games:' : 'No events found.';
+ list.forEach(ev=>{
+ const div = document.createElement('div');
+ div.className='card';
+ div.innerHTML = `<h3>${ev.strEvent}</h3><p>${ev.dateEvent} &middot; ${ev.strTime || 'TBD'}</p>`;
+ el.appendChild(div);
+ });
+}).catch(()=>{document.getElementById('status').textContent='Could not load live data. Connect to internet and refresh.';});
+</script>
+</body>
+</html>
